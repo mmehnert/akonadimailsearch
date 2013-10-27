@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2013 by  <>                 *
+ *   Copyright (C) 2013 by  Maximilian Mehnert <maximilian.mehnert@gmx.de> *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
