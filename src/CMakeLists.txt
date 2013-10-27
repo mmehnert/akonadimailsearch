@@ -5,8 +5,6 @@ set(akonadimailsearch_SRCS
    main.cpp
  )
 
-# Run ui files through uic
-kde4_add_ui_files(akonadimailsearch_SRCS akonadimailsearch.ui)
 
 # Set the name of the application
 kde4_add_executable(akonadimailsearch ${akonadimailsearch_SRCS})
@@ -17,5 +15,3 @@ target_link_libraries(akonadimailsearch ${KDE4_KDEUI_LIBS}  ${KDEPIMLIBS_AKONADI
 # Tell cmake to install the application binary
 install(TARGETS akonadimailsearch ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-# Install the .desktop file
-install( PROGRAMS akonadimailsearch.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )

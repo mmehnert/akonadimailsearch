@@ -25,7 +25,6 @@
 #include <kjob.h>
 #include <akonadi/contact/contactsearchjob.h>
 
-#include "ui_akonadimailsearch.h"
 
 
 /**
@@ -54,10 +53,6 @@ public slots:
     void searchResult( KJob *job );
 signals:
     void finished();
-private:
-    // this is the name of the root widget inside our Ui file
-    // you can rename it in designer and then change it here
-    Ui::mainWidget m_ui;
 };
 
 #endif // _AKONADIMAILSEARCH_H_
