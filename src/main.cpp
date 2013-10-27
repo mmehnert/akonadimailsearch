@@ -35,8 +35,8 @@ int main(int argc, char **argv)
 {
     QTextStream out(stdout);
     KAboutData about("simple", 0, ki18n("akonadimailsearch"), version, ki18n(description),
-                     KAboutData::License_GPL, ki18n("(C) 2011 Your Name"), KLocalizedString(), 0, "mail@example.com");
-    about.addAuthor( ki18n("Your Name"), KLocalizedString(), "mail@example.com" );
+                     KAboutData::License_GPL, ki18n("(C) 2011 Maximilian Mehnert"), KLocalizedString(), 0, "maximilian.mehnert@gmx.de");
+    about.addAuthor( ki18n("Maximilian Mehnert"), KLocalizedString(), "maximilian.mehnert@gmx.de" );
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
