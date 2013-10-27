@@ -24,6 +24,7 @@
 #include <KDE/KAboutData>
 #include <KDE/KCmdLineArgs>
 #include <KDE/KLocale>
+#include <QTextStream>
 
 static const char description[] =
     I18N_NOOP("A very simple KDE 4 Application");
@@ -32,18 +33,28 @@ static const char version[] = "0.1";
 
 int main(int argc, char **argv)
 {
+    QTextStream out(stdout);
     KAboutData about("simple", 0, ki18n("akonadimailsearch"), version, ki18n(description),
                      KAboutData::License_GPL, ki18n("(C) 2011 Your Name"), KLocalizedString(), 0, "mail@example.com");
     about.addAuthor( ki18n("Your Name"), KLocalizedString(), "mail@example.com" );
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
-    options.add("+[URL]", ki18n( "Document to open" ));
+    options.add("+[search]", ki18n( "string to search for" ));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QString search=QString();
+    if( args->count() > 0){
+        search=args->arg(0);
+    }
+
+
     akonadimailsearch *mainWindow = new akonadimailsearch;
-    mainWindow->show();
+    QObject::connect(mainWindow,SIGNAL(finished()),&app,SLOT(quit()));
+    
+    mainWindow->query(search);
     
     return app.exec();
 }

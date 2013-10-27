@@ -18,6 +18,12 @@
  ***************************************************************************/
 
 #include "akonadimailsearch.h"
+#include <akonadi/itemsearchjob.h>
+#include <akonadi/itemfetchscope.h>
+#include <akonadi/item.h>
+#include <akonadi/contact/contactsearchjob.h>
+#include <QTextStream>
+
 
 akonadimailsearch::akonadimailsearch()
     : KMainWindow()
@@ -31,5 +37,30 @@ akonadimailsearch::akonadimailsearch()
 akonadimailsearch::~akonadimailsearch()
 {
 }
+
+void akonadimailsearch::query(QString &search)
+{
+    QTextStream out(stdout);
+    Akonadi::ContactSearchJob *job = new Akonadi::ContactSearchJob();
+    
+    if (search.length() >0 ){
+        job->setQuery( Akonadi::ContactSearchJob::NameOrEmail, search,  Akonadi::ContactSearchJob::ContainsMatch );
+    }
+    connect( job, SIGNAL( result( KJob* ) ), this, SLOT( searchResult( KJob* ) ) );
+}
+
+void akonadimailsearch::searchResult( KJob *job )
+{
+    QTextStream out(stdout);
+    Akonadi::ContactSearchJob *searchJob = qobject_cast<Akonadi::ContactSearchJob*>( job );
+    const KABC::Addressee::List contacts = searchJob->contacts();
+ 
+    foreach ( const KABC::Addressee &contact, contacts ) 
+    {
+        out << contact.formattedName() << " <" << contact.preferredEmail()<< ">" <<endl;
+    }
+    emit finished();
+}
+
 
 #include "akonadimailsearch.moc"
