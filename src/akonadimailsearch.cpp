@@ -18,20 +18,12 @@
  ***************************************************************************/
 
 #include "akonadimailsearch.h"
-#include <akonadi/itemsearchjob.h>
-#include <akonadi/itemfetchscope.h>
-#include <akonadi/item.h>
 #include <akonadi/contact/contactsearchjob.h>
 #include <QTextStream>
 
 
 akonadimailsearch::akonadimailsearch()
-    : KMainWindow()
 {
-    // tell the KXmlGuiWindow that this is indeed the main widget
-    QWidget* w = new QWidget(this);
-    setCentralWidget(w);
-    m_ui.setupUi(w);
 }
 
 akonadimailsearch::~akonadimailsearch()
@@ -63,4 +55,3 @@ void akonadimailsearch::searchResult( KJob *job )
 }
 
 
-#include "akonadimailsearch.moc"

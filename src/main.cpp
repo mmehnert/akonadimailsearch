@@ -27,7 +27,7 @@
 #include <QTextStream>
 
 static const char description[] =
-    I18N_NOOP("A very simple KDE 4 Application");
+    I18N_NOOP("akonadi email address search for notmuch");
 
 static const char version[] = "0.1";
 
@@ -46,15 +46,16 @@ int main(int argc, char **argv)
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QString search=QString();
+
     if( args->count() > 0){
         search=args->arg(0);
     }
 
 
-    akonadimailsearch *mainWindow = new akonadimailsearch;
-    QObject::connect(mainWindow,SIGNAL(finished()),&app,SLOT(quit()));
+    akonadimailsearch *mainSearch = new akonadimailsearch;
+    QObject::connect(mainSearch,SIGNAL(finished()),&app,SLOT(quit()));
     
-    mainWindow->query(search);
+    mainSearch->query(search);
     
     return app.exec();
 }
