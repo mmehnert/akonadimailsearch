@@ -32,7 +32,6 @@ akonadimailsearch::~akonadimailsearch()
 
 void akonadimailsearch::query(QString &search)
 {
-    QTextStream out(stdout);
     Akonadi::ContactSearchJob *job = new Akonadi::ContactSearchJob();
     
     if (search.length() >0 ){
