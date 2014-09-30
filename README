@@ -1,5 +1,0 @@
-A small program that I created to have email address completion for notmuch via akonadi.
-
-Usage: akonadimailsearch [Qt-options] [KDE-options] [search] 
-
-
