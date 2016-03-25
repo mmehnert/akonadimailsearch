@@ -32,25 +32,25 @@ akonadimailsearch::~akonadimailsearch()
 
 void akonadimailsearch::query(QString &search)
 {
-    Akonadi::ContactSearchJob *job = new Akonadi::ContactSearchJob();
-    
-    if (search.length() >0 ){
-        job->setQuery( Akonadi::ContactSearchJob::NameOrEmail, search,  Akonadi::ContactSearchJob::ContainsMatch );
-    }
-    connect( job, SIGNAL( result( KJob* ) ), this, SLOT( searchResult( KJob* ) ) );
+	Akonadi::ContactSearchJob *job = new Akonadi::ContactSearchJob();
+	
+	if (search.length() >0 ){
+		job->setQuery( Akonadi::ContactSearchJob::NameOrEmail, search,	Akonadi::ContactSearchJob::ContainsMatch );
+	}
+	connect( job, SIGNAL( result( KJob* ) ), this, SLOT( searchResult( KJob* ) ) );
 }
 
 void akonadimailsearch::searchResult( KJob *job )
 {
-    QTextStream out(stdout);
-    Akonadi::ContactSearchJob *searchJob = qobject_cast<Akonadi::ContactSearchJob*>( job );
-    const KABC::Addressee::List contacts = searchJob->contacts();
+	QTextStream out(stdout);
+	Akonadi::ContactSearchJob *searchJob = qobject_cast<Akonadi::ContactSearchJob*>( job );
+	const KABC::Addressee::List contacts = searchJob->contacts();
  
-    foreach ( const KABC::Addressee &contact, contacts ) 
-    {
-        out << contact.formattedName() << " <" << contact.preferredEmail()<< ">" <<endl;
-    }
-    emit finished();
+	foreach ( const KABC::Addressee &contact, contacts ) 
+	{
+		out << contact.formattedName() << " <" << contact.preferredEmail()<< ">" <<endl;
+	}
+	emit finished();
 }
 
 

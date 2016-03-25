@@ -28,7 +28,7 @@
 
 
 /**
- * This class serves as the main window for akonadimailsearch.  It handles the
+ * This class serves as the main window for akonadimailsearch.	It handles the
  * menus, toolbars and status bars.
  *
  * @short Main window class
@@ -37,22 +37,22 @@
  */
 class akonadimailsearch : public KMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * Default Constructor
-     */
-    akonadimailsearch();
+	/**
+	 * Default Constructor
+	 */
+	akonadimailsearch();
 
-    /**
-     * Default Destructor
-     */
-    virtual ~akonadimailsearch();
-    void query(QString &search);
+	/**
+	 * Default Destructor
+	 */
+	virtual ~akonadimailsearch();
+	void query(QString &search);
 public slots:
-    void searchResult( KJob *job );
+	void searchResult( KJob *job );
 signals:
-    void finished();
+	void finished();
 };
 
 #endif // _AKONADIMAILSEARCH_H_

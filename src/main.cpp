@@ -27,35 +27,35 @@
 #include <QTextStream>
 
 static const char description[] =
-    I18N_NOOP("akonadi email address search for notmuch");
+	I18N_NOOP("akonadi email address search for notmuch");
 
 static const char version[] = "0.1";
 
 int main(int argc, char **argv)
 {
-    QTextStream out(stdout);
-    KAboutData about("simple", 0, ki18n("akonadimailsearch"), version, ki18n(description),
-                     KAboutData::License_GPL, ki18n("(C) 2011 Maximilian Mehnert"), KLocalizedString(), 0, "maximilian.mehnert@gmx.de");
-    about.addAuthor( ki18n("Maximilian Mehnert"), KLocalizedString(), "maximilian.mehnert@gmx.de" );
-    KCmdLineArgs::init(argc, argv, &about);
+	QTextStream out(stdout);
+	KAboutData about("simple", 0, ki18n("akonadimailsearch"), version, ki18n(description),
+					 KAboutData::License_GPL, ki18n("(C) 2011 Maximilian Mehnert"), KLocalizedString(), 0, "maximilian.mehnert@gmx.de");
+	about.addAuthor( ki18n("Maximilian Mehnert"), KLocalizedString(), "maximilian.mehnert@gmx.de" );
+	KCmdLineArgs::init(argc, argv, &about);
 
-    KCmdLineOptions options;
-    options.add("+[search]", ki18n( "string to search for" ));
-    KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app;
+	KCmdLineOptions options;
+	options.add("+[search]", ki18n( "string to search for" ));
+	KCmdLineArgs::addCmdLineOptions(options);
+	KApplication app;
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    QString search=QString();
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	QString search=QString();
 
-    if( args->count() > 0){
-        search=args->arg(0);
-    }
+	if( args->count() > 0){
+		search=args->arg(0);
+	}
 
 
-    akonadimailsearch *mainSearch = new akonadimailsearch;
-    QObject::connect(mainSearch,SIGNAL(finished()),&app,SLOT(quit()));
-    
-    mainSearch->query(search);
-    
-    return app.exec();
+	akonadimailsearch *mainSearch = new akonadimailsearch;
+	QObject::connect(mainSearch,SIGNAL(finished()),&app,SLOT(quit()));
+	
+	mainSearch->query(search);
+	
+	return app.exec();
 }
