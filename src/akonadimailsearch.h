@@ -23,34 +23,27 @@
 
 #include <KDE/KMainWindow>
 #include <kjob.h>
-#include <akonadi/contact/contactsearchjob.h>
+#include <KABC/Addressee>
+#include <Akonadi/Item>
+#include <Akonadi/ItemFetchJob>
+#include <Akonadi/ItemFetchScope>
+#include <Akonadi/Collection>
+#include <Akonadi/CollectionFetchJob>
+#include <Akonadi/CollectionFetchScope>
 
-
-
-/**
- * This class serves as the main window for akonadimailsearch.	It handles the
- * menus, toolbars and status bars.
- *
- * @short Main window class
- * @author Your Name <mail@example.com>
- * @version 0.1
- */
 class akonadimailsearch : public KMainWindow
 {
 	Q_OBJECT
+private:
+	int activeFetchJobsCount;
+	QString mysearch=NULL;
 public:
-	/**
-	 * Default Constructor
-	 */
 	akonadimailsearch();
-
-	/**
-	 * Default Destructor
-	 */
 	virtual ~akonadimailsearch();
 	void query(QString &search);
-public slots:
-	void searchResult( KJob *job );
+private slots:
+	void onCollectionsFetched(KJob* job);
+	void onItemsFetched(KJob* job);
 signals:
 	void finished();
 };

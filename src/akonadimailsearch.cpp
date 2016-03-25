@@ -18,12 +18,13 @@
  ***************************************************************************/
 
 #include "akonadimailsearch.h"
-#include <akonadi/contact/contactsearchjob.h>
 #include <QTextStream>
 
+using namespace Akonadi;
 
 akonadimailsearch::akonadimailsearch()
 {
+	activeFetchJobsCount=0;
 }
 
 akonadimailsearch::~akonadimailsearch()
@@ -32,25 +33,55 @@ akonadimailsearch::~akonadimailsearch()
 
 void akonadimailsearch::query(QString &search)
 {
-	Akonadi::ContactSearchJob *job = new Akonadi::ContactSearchJob();
-	
-	if (search.length() >0 ){
-		job->setQuery( Akonadi::ContactSearchJob::NameOrEmail, search,	Akonadi::ContactSearchJob::ContainsMatch );
-	}
-	connect( job, SIGNAL( result( KJob* ) ), this, SLOT( searchResult( KJob* ) ) );
+	mysearch=search;
+	CollectionFetchJob *fetchJob = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive, this);
+	fetchJob->fetchScope().setContentMimeTypes( QStringList() << "text/directory" );
+	connect(fetchJob, SIGNAL(finished(KJob*)), SLOT(onCollectionsFetched(KJob*)));
 }
 
-void akonadimailsearch::searchResult( KJob *job )
+void akonadimailsearch::onCollectionsFetched(KJob* job)
 {
-	QTextStream out(stdout);
-	Akonadi::ContactSearchJob *searchJob = qobject_cast<Akonadi::ContactSearchJob*>( job );
-	const KABC::Addressee::List contacts = searchJob->contacts();
- 
-	foreach ( const KABC::Addressee &contact, contacts ) 
-	{
-		out << contact.formattedName() << " <" << contact.preferredEmail()<< ">" <<endl;
+	if (job->error()) {
+		kWarning() << job->errorString();
+		emit finished();
+	} else {
+		CollectionFetchJob *fetchJob = qobject_cast<CollectionFetchJob*>(job);
+		QList<Collection> contactCollections;
+		foreach (const Collection &collection, fetchJob->collections()) {
+			if (collection.isVirtual()) {
+				continue;
+			}
+			if (collection.contentMimeTypes().contains( KABC::Addressee::mimeType() ) ) {
+				ItemFetchJob *itemFetchJob = new ItemFetchJob(collection);
+				itemFetchJob->fetchScope().fetchFullPayload();
+				connect(itemFetchJob, SIGNAL(finished(KJob*)), SLOT(onItemsFetched(KJob*)));
+				++activeFetchJobsCount;
+			}
+		}
+		if (activeFetchJobsCount == 0) {
+			emit finished();
+		}
 	}
-	emit finished();
 }
-
-
+void akonadimailsearch::onItemsFetched(KJob *job)
+{
+	if (job->error()) {
+		kWarning() << job->errorString();
+	} else {
+		ItemFetchJob *itemFetchJob = qobject_cast<ItemFetchJob*>(job);
+		foreach (const Item &item, itemFetchJob->items()) {
+			if(item.hasPayload<KABC::Addressee>()) {
+				const QString id = item.url().prettyUrl();
+				const KABC::Addressee contact = item.payload<KABC::Addressee>();
+				QTextStream out(stdout);
+				if(contact.preferredEmail().size() > 0 && \
+					( contact.preferredEmail().contains(mysearch) || contact.formattedName().contains(mysearch) )){
+					out << contact.formattedName() << " <" << contact.preferredEmail()<< ">" <<endl;
+				}
+			}
+		}
+	}
+	if (--activeFetchJobsCount == 0) {
+		emit finished();
+	}
+}
